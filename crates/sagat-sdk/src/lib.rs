@@ -12,9 +12,10 @@ pub use messages::{
 };
 pub use types::{
     Address, AuthCheckResponse, AuthMode, AuthResponse, CreateMultisigRequest,
-    CreateProposalRequest, GetInvitationsParams, GetProposalsParams, Multisig, MultisigMember,
-    MultisigProposer, MultisigWithMembers, PaginatedResponse, Proposal, ProposalSignature,
-    ProposalStatus, ProposalWithSignatures, PublicProposal, PublicProposalMember,
-    PublicProposalMultisig, RejectMultisigInviteResponse, Result, SagatError, SignedMessageRequest,
-    SuccessResponse, VoteProposalRequest, VoteProposalResponse,
+    CreateProposalRequest, Expiry, GetInvitationsParams, GetProposalsParams, Multisig,
+    MultisigMember, MultisigProposer, MultisigWithMembers, PaginatedResponse, Proposal,
+    ProposalSignature, ProposalStatus, ProposalWithSignatures, PublicProposal,
+    PublicProposalMember, PublicProposalMultisig, RejectMultisigInviteResponse, Result, SagatError,
+    SignedMessageRequest, SuccessResponse, VoteProposalRequest, VoteProposalResponse,
+    default_expiry,
 };

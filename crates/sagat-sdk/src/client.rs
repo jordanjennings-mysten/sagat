@@ -9,10 +9,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     Address, AuthCheckResponse, AuthMode, AuthResponse, CreateMultisigRequest,
-    CreateProposalRequest, GetInvitationsParams, GetProposalsParams, Multisig, MultisigMember,
-    MultisigWithMembers, PaginatedResponse, Proposal, ProposalStatus, ProposalWithSignatures,
-    PublicProposal, RejectMultisigInviteResponse, Result, SignedMessageRequest, SuccessResponse,
-    VoteProposalRequest, VoteProposalResponse,
+    CreateProposalRequest, Expiry, GetInvitationsParams, GetProposalsParams, Multisig,
+    MultisigMember, MultisigWithMembers, PaginatedResponse, Proposal, ProposalStatus,
+    ProposalWithSignatures, PublicProposal, RejectMultisigInviteResponse, Result,
+    SignedMessageRequest, SuccessResponse, VoteProposalRequest, VoteProposalResponse,
 };
 
 #[derive(Clone, Debug)]
@@ -49,11 +49,16 @@ impl Default for SagatClient {
 }
 
 impl SagatClient {
-    pub async fn connect(&mut self, signature: String, expiry: String) -> Result<AuthResponse> {
+    pub async fn connect(
+        &mut self,
+        signature: String,
+        expiry: impl Into<Expiry>,
+    ) -> Result<AuthResponse> {
         let endpoint = match self.mode {
             AuthMode::Script => "/auth/script-connect",
             AuthMode::Cookie => return Err(crate::SagatError::UnsupportedAuthMode(self.mode)),
         };
+        let expiry = expiry.into().into_string();
 
         let response: AuthResponse = self
             .post(
@@ -271,8 +276,9 @@ impl SagatClient {
         address: String,
         proposer: String,
         signature: String,
-        expiry: String,
+        expiry: impl Into<Expiry>,
     ) -> Result<SuccessResponse> {
+        let expiry = expiry.into().into_string();
         self.post(
             &format!("/multisig/{address}/add-proposer"),
             Auth::None,
@@ -290,8 +296,9 @@ impl SagatClient {
         address: String,
         proposer: String,
         signature: String,
-        expiry: String,
+        expiry: impl Into<Expiry>,
     ) -> Result<SuccessResponse> {
+        let expiry = expiry.into().into_string();
         self.post(
             &format!("/multisig/{address}/remove-proposer"),
             Auth::None,

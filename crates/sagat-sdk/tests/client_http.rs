@@ -32,7 +32,7 @@ async fn authenticated_client(server: &MockServer) -> SagatClient {
 
     let mut client = client(server);
     client
-        .connect("sig".into(), "2026-05-29T12:00:00.000Z".into())
+        .connect("sig".into(), "2026-05-29T12:00:00.000Z")
         .await
         .expect("connect should store auth token");
     client
@@ -56,7 +56,7 @@ async fn connect_posts_signature_and_expiry_to_script_connect() {
 
     let mut client = client(&server);
     let response = client
-        .connect("sig".into(), "2026-05-29T12:00:00.000Z".into())
+        .connect("sig".into(), "2026-05-29T12:00:00.000Z")
         .await
         .expect("connect should return auth response");
 
@@ -76,7 +76,7 @@ async fn connect_errors_in_cookie_mode_without_requesting_server() {
 
     let mut client = SagatClient::new(server.uri(), AuthMode::Cookie);
     let error = client
-        .connect("sig".into(), "2026-05-29T12:00:00.000Z".into())
+        .connect("sig".into(), "2026-05-29T12:00:00.000Z")
         .await
         .expect_err("cookie auth should be unsupported");
 
@@ -106,7 +106,7 @@ async fn disconnect_clears_token_so_check_auth_fails_locally() {
 
     let mut client = client(&server);
     client
-        .connect("sig".into(), "2026-05-29T12:00:00.000Z".into())
+        .connect("sig".into(), "2026-05-29T12:00:00.000Z")
         .await
         .expect("connect should store auth token");
 
@@ -150,7 +150,7 @@ async fn check_auth_gets_auth_check() {
 
     let mut client = client(&server);
     client
-        .connect("sig".into(), "2026-05-29T12:00:00.000Z".into())
+        .connect("sig".into(), "2026-05-29T12:00:00.000Z")
         .await
         .expect("connect should store auth token");
 
@@ -216,7 +216,7 @@ async fn create_multisig_posts_to_multisig() {
 
     let mut client = client(&server);
     client
-        .connect("sig".into(), "2026-05-29T12:00:00.000Z".into())
+        .connect("sig".into(), "2026-05-29T12:00:00.000Z")
         .await
         .expect("connect should store auth token");
 
@@ -291,7 +291,7 @@ async fn get_multisig_gets_multisig_by_address() {
 
     let mut client = client(&server);
     client
-        .connect("sig".into(), "2026-05-29T12:00:00.000Z".into())
+        .connect("sig".into(), "2026-05-29T12:00:00.000Z")
         .await
         .expect("connect should store auth token");
 
@@ -788,7 +788,7 @@ async fn add_multisig_proposer_posts_proposer_signature_and_expiry() {
             "0xmultisig".into(),
             "0xproposer".into(),
             "sig".into(),
-            "2026-05-29T12:00:00.000Z".into(),
+            "2026-05-29T12:00:00.000Z",
         )
         .await
         .expect("add_multisig_proposer should return success");
@@ -818,7 +818,7 @@ async fn remove_multisig_proposer_posts_proposer_signature_and_expiry() {
             "0xmultisig".into(),
             "0xproposer".into(),
             "sig".into(),
-            "2026-05-29T12:00:00.000Z".into(),
+            "2026-05-29T12:00:00.000Z",
         )
         .await
         .expect("remove_multisig_proposer should return success");

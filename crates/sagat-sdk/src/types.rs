@@ -5,8 +5,79 @@ use std::fmt;
 
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use thiserror::Error;
+use time::{
+    Duration, OffsetDateTime, UtcOffset, format_description::FormatItem, macros::format_description,
+};
 
 pub type Result<T> = std::result::Result<T, SagatError>;
+
+const DEFAULT_EXPIRY_DURATION: Duration = Duration::minutes(30);
+const EXPIRY_FORMAT: &[FormatItem<'static>] =
+    format_description!("[year]-[month]-[day]T[hour]:[minute]:[second].[subsecond digits:3]Z");
+
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+pub struct Expiry(String);
+
+impl Expiry {
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+
+    pub fn into_string(self) -> String {
+        self.0
+    }
+}
+
+impl From<&str> for Expiry {
+    fn from(value: &str) -> Self {
+        Self(value.to_owned())
+    }
+}
+
+impl From<&String> for Expiry {
+    fn from(value: &String) -> Self {
+        Self(value.clone())
+    }
+}
+
+impl From<String> for Expiry {
+    fn from(value: String) -> Self {
+        Self(value)
+    }
+}
+
+impl From<&Expiry> for Expiry {
+    fn from(value: &Expiry) -> Self {
+        value.clone()
+    }
+}
+
+impl From<OffsetDateTime> for Expiry {
+    fn from(value: OffsetDateTime) -> Self {
+        Self(
+            value
+                .to_offset(UtcOffset::UTC)
+                .format(EXPIRY_FORMAT)
+                .expect("fixed expiry format should be valid"),
+        )
+    }
+}
+
+impl AsRef<str> for Expiry {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+impl fmt::Display for Expiry {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str(self.as_str())
+    }
+}
+
+pub fn default_expiry() -> Expiry {
+    (OffsetDateTime::now_utc() + DEFAULT_EXPIRY_DURATION).into()
+}
 
 #[derive(Debug, Error)]
 pub enum SagatError {
